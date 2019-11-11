@@ -1,0 +1,105 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct nod {
+       int id;
+       char tag;
+       struct nod *next, *prev;
+};
+
+
+struct nod* insert(struct nod X, struct nod* T){
+if(T==NULL){
+    T = malloc(sizeof(struct nod));
+    if(T==NULL){
+              printf("\n Eroare !");
+              exit(1);
+              }
+    else
+    {
+             T->tag = X.tag;
+             T->id = X.id;
+             T->prev = T->next = NULL;
+    }
+}
+else
+    if(X.id < T->id)
+            T->prev = insert(X,T->prev);
+    else
+        if(X.id >T->id)
+        T->next=insert(X,T->next);
+return T;
+}
+
+
+void inorder(struct nod* head)
+{
+   if(head !=NULL)
+   {
+        inorder(head->prev);
+        printf("%c",head->tag);
+        inorder(head->next);
+   }
+}
+
+void preorder(struct nod* head)
+{
+   if(head !=NULL)
+   {  printf("%c",head->tag);
+       preorder(head->prev);
+       preorder(head->next);
+   }
+}
+
+void postorder(struct nod* head)
+{
+   if(head !=NULL)
+   {
+        postorder(head->prev);
+
+        postorder(head->next);
+          printf("%c",head->tag);
+   }
+}
+
+int main(int argc, char *argv[])
+{
+    //nod data[]={{4,'o'},{2,'r'},{6,'e'},{1,'a'},{3,'b'},{5,'r'},{7,'\n'}};
+    struct nod data[]={{4,'i'},{2,'a'},{1,'d'},{3,'v'},{5,'d'},{6,10}};
+    struct nod* head=NULL;
+    struct nod* temp;
+    struct nod* tree=NULL;
+    int i;
+    for(i=0;i<5;i++){
+          if(!head) {
+                    temp = malloc(sizeof(struct nod));
+                    head = temp;
+                    }
+          else{
+               temp = head;
+               while(temp->next) temp = temp->next;
+               temp->next = malloc(sizeof(struct nod));
+               temp = temp->next;
+               }
+          *temp = data[i];
+    }
+
+    // inchide lista
+    temp->next = head;
+
+    // sare la primul nod
+    temp = temp->next;        // sau temp=head;
+    do{
+                tree=insert(*temp,tree);
+                temp = temp->next;
+    }while(temp != head);
+
+    inorder(tree);
+ printf("\n");
+    preorder(tree);
+ printf("\n");
+        postorder(tree);
+         printf("\n");
+    system("PAUSE");
+    return 0;
+}
